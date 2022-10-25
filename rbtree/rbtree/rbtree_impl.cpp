@@ -226,7 +226,7 @@ static void fix_black(RBTree* tree, RBTreeNode* node) {
 	}
 
 	if (parent->color == RBTN_RED) {
-		if (has_red_children(node)) { // subling is black and has red children
+		if (has_red_children(subling)) { // subling is black and has red children
 			if (node == parent->left) {
 				if (subling->right) {
 					left_rotate(tree, parent);
