@@ -226,7 +226,7 @@ static void fix_black(RBTree* tree, RBTreeNode* node) {
 	}
 
 	if (parent->color == RBTN_RED) {
-		if (subling->left || subling->right) {
+		if (has_red_children(node)) { // subling is black and has red children
 			if (node == parent->left) {
 				if (subling->right) {
 					left_rotate(tree, parent);
@@ -256,7 +256,15 @@ static void fix_black(RBTree* tree, RBTreeNode* node) {
 				}
 			}
 		}
-		else {
+		else if (subling->left || subling->right) { // subling is black and has black children
+			if (node == parent->left) {
+				left_rotate(tree, parent);
+			}
+			else {
+				right_rotate(tree, parent);
+			}
+		}
+		else { // subling has no child
 			parent->color = RBTN_BLACK;
 			subling->color = RBTN_RED;
 		}
@@ -293,15 +301,26 @@ static void fix_black(RBTree* tree, RBTreeNode* node) {
 			}
 		}
 		else { // subling is red
+			RBTreeNode* close_nephew = NULL;
 			if (node == parent->left) {
+				close_nephew = subling->left;
 				left_rotate(tree, parent);
-				swap_color(parent, subling);
-				swap_color(parent, subling->left);
 			}
 			else {
+				close_nephew = subling->right;
 				right_rotate(tree, parent);
-				swap_color(parent, subling);
-				swap_color(parent, subling->right);
+			}
+
+			RBTreeNode* new_subling = get_subling(node);
+			if (has_red_children(new_subling)) {
+				fix_black(tree, node);
+				swap_color(new_subling, subling);
+			}
+			else if (new_subling->left || new_subling->right) {
+				swap_color(new_subling, subling);
+			}
+			else {
+				swap_color(new_subling, subling);
 			}
 		}
 	}
@@ -435,10 +454,19 @@ bool rbtree_remove(RBTree* tree, int val) {
 			fix_black(tree, rnode);
 		}
 
-		if (rnode == rnode->parent->left)
-			rnode->parent->left = NULL;
-		else
-			rnode->parent->right = NULL;
+		if (rnode == node) {
+			node->right = rnode->right;
+			if (rnode->right) {
+				rnode->right->parent = node;
+			}
+		}
+		else {
+			if (rnode == rnode->parent->left)
+				rnode->parent->left = NULL;
+			else
+				rnode->parent->right = NULL;
+		}
+
 		rnode->parent = NULL;
 		node = rnode;
 	}

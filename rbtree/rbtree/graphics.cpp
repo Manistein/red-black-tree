@@ -1,8 +1,16 @@
 #include "graphics.h"
 #include <corecrt_math.h>
 #include <algorithm>
+#include <time.h>
 
 static void draw_control_panel(RBTree* tree) {
+	static int index = 0;
+	static time_t t = time(NULL);
+
+	char buf[128] = { 0 };
+	sprintf(buf, "%lld.txt", t);
+	FILE* f = fopen(buf, "a+");
+
 	// Control Pannel
 	ImGui::Begin("Control Pannel");
 
@@ -14,21 +22,27 @@ static void draw_control_panel(RBTree* tree) {
 	}
 
 	if (ImGui::Button("insert")) {
+		index++;
+		fprintf(f, "index:%d op:insert %d\n", index, v);
 		rbtree_insert(tree, v);
 	}
 
 	if (ImGui::Button("delete")) {
+		index++;
+		fprintf(f, "index:%d op:delete %d\n", index, v);
 		rbtree_remove(tree, v);
 	}
 
 	ImGui::End();
+
+	fclose(f);
 }
 
 const float min_x = 60;
 const float min_y = 60;
 const float y_step = 60;
 const float radius = 20;
-const float font_shift = 10;
+const float font_shift = 8;
 
 const ImU32 color[RBTN_COLOR_INVALID] = {
 	IM_COL32(0,0,0,255),
