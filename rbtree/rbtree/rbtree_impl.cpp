@@ -556,7 +556,7 @@ int rbtree_traverse(RBTreeNode* n, int parent_index, int level, RBTArray* array)
 //	free(array);
 //}
 
-void rbtree_unint(RBTree* tree) {
+void rbtree_unint(RBTree** ptree) {
 	RBTArray* array = (RBTArray*)malloc(sizeof(RBTArray));
 	if (array == NULL) {
 		abort();
@@ -564,7 +564,7 @@ void rbtree_unint(RBTree* tree) {
 	array->arr = NULL;
 	array->size = 0;
 
-	rbtree_traverse(tree->root, 0, 1, array);
+	rbtree_traverse((*ptree)->root, 0, 1, array);
 
 	for (int i = 0; i < array->size; i++) {
 		RBTreeNode* n = array->arr[i];
@@ -574,6 +574,8 @@ void rbtree_unint(RBTree* tree) {
 		}
 	}
 
-	tree->root = NULL;
+	(*ptree)->root = NULL;
 	free(array);
+	free(*ptree);
+	*ptree = NULL;
 }

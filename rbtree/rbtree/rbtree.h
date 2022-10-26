@@ -32,7 +32,7 @@ RBTree* rbtree_init();
 RBTreeNode* rbtree_insert(RBTree* tree, int val);
 RBTreeNode* rbtree_find(RBTree* tree, int val);
 bool rbtree_remove(RBTree* tree, int val);
-void rbtree_unint(RBTree* tree);
+void rbtree_unint(RBTree** ptree);
 int rbtree_traverse(RBTreeNode* n, int parent_index, int level, RBTArray* array);
 
 //void print_tree(RBTree* tree);

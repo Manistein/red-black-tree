@@ -127,7 +127,7 @@ int main(int, char**)
 		glfwSwapBuffers(window);
 	}
 
-	rbtree_unint(rbtree);
+	rbtree_unint(&rbtree);
 
 	// Cleanup
 	ImGui_ImplOpenGL3_Shutdown();

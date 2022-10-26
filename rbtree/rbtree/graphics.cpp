@@ -96,10 +96,18 @@ static void draw(RBTreeNode* node, float parent_x, float parent_y, float x_delta
 }
 
 static void draw_tree(RBTree* rbtree) {
+	static ImVec2 mouse_drag;
+
+	if (ImGui::IsMouseDragging(0)) {
+		ImVec2 drag_delta = ImGui::GetIO().MouseDelta;
+		mouse_drag.x += drag_delta.x;
+		mouse_drag.y += drag_delta.y;
+	}
+
 	int depth = rbtree_traverse(rbtree->root, 0, 1, NULL);
 	int max_level_nodes = (int)pow(2, (double)(depth - 1));
 	float width = (max_level_nodes * 2 * radius) + (max_level_nodes - 1) * radius;
-	draw(rbtree->root, width / 2 + min_x, min_y, width / 2);
+	draw(rbtree->root, width / 2 + min_x + mouse_drag.x, min_y + mouse_drag.y, width / 2);
 }
 
 void draw_loop(RBTree* rbtree) {
