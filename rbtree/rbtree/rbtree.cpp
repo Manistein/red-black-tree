@@ -98,6 +98,18 @@ int main(int, char**)
 
 	RBTree* rbtree = rbtree_init();
 
+	int add_list[] = {8,1000,8,5000,9,89,44,3,700, 60, 54, 800, 980, 678, 450, 67, 23, 94, 19, 68, 563, 946, 2745, 3343, 674, 498, 55, 346, 123, 347, 942, 564, 675, 99, 798, 4367, 9532, 75,
+		795, 342, 9834, 56, 74, 785, 674, 849, 876, 678, 757, 5465, 56, 4657, 34, 35, 43, 78, 645, 65, 876, 65, 365, 65, 365, 8235, 98, 78, 88, 73, 76, 2, 2, 1, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16 };
+
+	for (int i = 0; i < sizeof(add_list) / sizeof(add_list[0]); i++) {
+		rbtree_insert(rbtree, add_list[i]);
+	}
+
+	int del_list[] = { 946,849,342,675,365,123,347,43,60 };
+	for (int i = 0; i < sizeof(del_list) / sizeof(add_list[0]); i++) {
+		rbtree_remove(rbtree, del_list[i]);
+	}
+
 	// Main loop
 	while (!glfwWindowShouldClose(window))
 	{

@@ -228,30 +228,32 @@ static void fix_black(RBTree* tree, RBTreeNode* node) {
 	if (parent->color == RBTN_RED) {
 		if (has_red_children(subling)) { // subling is black and has red children
 			if (node == parent->left) {
-				if (subling->right) {
+				if (subling->right && subling->right->color == RBTN_RED) {
 					left_rotate(tree, parent);
 					swap_color(subling, parent);
 					subling->right->color = parent->color;
 				}
 				else {
+					RBTreeNode* old_close_nephew = subling->left;
 					right_rotate(tree, subling);
-					swap_color(subling, subling->left);
+					swap_color(subling, old_close_nephew);
 					left_rotate(tree, parent);
-					swap_color(parent, subling->left);
+					swap_color(parent, old_close_nephew);
 					subling->color = parent->color;
 				}
 			}
 			else {
-				if (subling->left) {
+				if (subling->left && subling->left->color == RBTN_RED) {
 					right_rotate(tree, parent);
 					swap_color(subling, parent);
 					subling->left->color = parent->color;
 				}
 				else {
+					RBTreeNode* old_close_nephew = subling->right;
 					left_rotate(tree, subling);
-					swap_color(subling, subling->right);
+					swap_color(subling, old_close_nephew);
 					right_rotate(tree, parent);
-					swap_color(subling->right, parent);
+					swap_color(old_close_nephew, parent);
 					subling->color = parent->color;
 				}
 			}
@@ -273,25 +275,27 @@ static void fix_black(RBTree* tree, RBTreeNode* node) {
 		if (subling->color == RBTN_BLACK) {
 			if (has_red_children(subling)) {
 				if (node == parent->left) {
-					if (subling->right) {
+					if (subling->right && subling->right->color == RBTN_RED) {
 						left_rotate(tree, parent);
 						subling->right->color = RBTN_BLACK;
 					}
 					else {
+						RBTreeNode* old_close_nephew = subling->left;
 						right_rotate(tree, subling);
 						left_rotate(tree, parent);
-						subling->left->color = RBTN_BLACK;
+						old_close_nephew->color = RBTN_BLACK;
 					}
 				}
 				else {
-					if (subling->left) {
+					if (subling->left && subling->left->color == RBTN_RED) {
 						right_rotate(tree, parent);
 						subling->left->color = RBTN_BLACK;
 					}
 					else {
+						RBTreeNode* old_close_nephew = subling->left;
 						left_rotate(tree, subling);
 						right_rotate(tree, parent);
-						subling->right->color = RBTN_BLACK;
+						old_close_nephew->color = RBTN_BLACK;
 					}
 				}
 			}
@@ -454,18 +458,14 @@ bool rbtree_remove(RBTree* tree, int val) {
 			fix_black(tree, rnode);
 		}
 
-		if (rnode == node) {
-			node->right = rnode->right;
-			if (rnode->right) {
-				rnode->right->parent = node;
-			}
-		}
-		else {
-			if (rnode == rnode->parent->left)
-				rnode->parent->left = NULL;
-			else
-				rnode->parent->right = NULL;
-		}
+
+		if (rnode == rnode->parent->left)
+			rnode->parent->left = rnode->right;
+		else
+			rnode->parent->right = rnode->right;
+
+		if (rnode->right)
+			rnode->right->parent = rnode->parent;
 
 		rnode->parent = NULL;
 		node = rnode;
