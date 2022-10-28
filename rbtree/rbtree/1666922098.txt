@@ -1,0 +1,2 @@
+index:1 op:delete 35
+index:2 op:delete 54

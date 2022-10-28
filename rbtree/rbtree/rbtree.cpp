@@ -105,7 +105,7 @@ int main(int, char**)
 		rbtree_insert(rbtree, add_list[i]);
 	}
 
-	int del_list[] = { 946,849,342,675,365,123,347,43,60 };
+	int del_list[] = { 88, 342, 980, 849, 876, 8235, 5465, 946, 942, 645, 564, 675, 700, 785, 757, 55, 34, 4, 75, 78, 76, 74, 498, 9834 };
 	for (int i = 0; i < sizeof(del_list) / sizeof(add_list[0]); i++) {
 		rbtree_remove(rbtree, del_list[i]);
 	}

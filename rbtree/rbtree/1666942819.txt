@@ -1,0 +1,10 @@
+index:1 op:delete 9532
+index:2 op:delete 2745
+index:3 op:insert 4300
+index:4 op:insert 4400
+index:5 op:insert 4700
+index:6 op:insert 5100
+index:7 op:delete 1000
+index:8 op:delete 4700
+index:9 op:delete 5100
+index:10 op:delete 5000
